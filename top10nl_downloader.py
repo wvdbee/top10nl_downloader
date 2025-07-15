@@ -1,21 +1,19 @@
-from . import resources
 """
 Top10NL Downloader - A QGIS plugin for downloading Top10NL objects via OGC-API Features
 """
 
 import os
 import datetime
-import configparser
 # nieuw
 import json
 import urllib.request
 import urllib.error
-from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication, QVariant, QThread, pyqtSignal
+from qgis.PyQt.QtCore import Qt, QSettings, QTranslator, QCoreApplication, QThread, pyqtSignal
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import (QAction, QFileDialog, QMessageBox, 
                                 QDialog, QVBoxLayout, QHBoxLayout, 
                                 QLabel, QLineEdit, QTextEdit, QPushButton, 
-                                QProgressBar, QRadioButton, QCheckBox, QGroupBox,
+                                QProgressBar, QRadioButton, QGroupBox,
                                 QListWidget, QListWidgetItem)
 from qgis.core import (QgsProject, QgsRectangle, QgsVectorLayer, QgsLayerTreeGroup, QgsLayerTreeLayer,
                       QgsCoordinateReferenceSystem, QgsTask, QgsApplication, 
