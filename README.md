@@ -30,7 +30,7 @@ Deze plugin is niet bedoeld om grote gebieden mee te downloaden. Wanneer grote g
 
 Na installatie is de plugin op twee manieren te benaderen:
 - Via het `Plugins`-menu > `PDOK OGC API Features-downloaders` > `Tp10NL Downloader`.
-- Via de `PDOK OGC API Features-downloaders` toolbar: het icoon van de `Top10NL Downloader` ![Top10 Downloader-icoon](icon-1.png)
+- Via de `PDOK OGC API Features-downloaders` toolbar: het icoon van de `Top10NL Downloader` ![Top10 Downloader-icoon](images/icon-1.png)
 
 ### Standaardwerkwijze.
 
@@ -136,7 +136,7 @@ Do not use this plugin to download large area's. For that purpose use the [BRT T
 
 After installation, you can access the plugin in two ways:
 - From the `Plugins` menu > `PDOK OGC API Features-downloaders` > `Tp10NL Downloader`.
-- From the `PDOK OGC API Features-downloaders` toolbar: the icon for `Top10NL Downloader` ![Top10 Downloader icon](icon-1.png)
+- From the `PDOK OGC API Features-downloaders` toolbar: the icon for `Top10NL Downloader` ![Top10 Downloader icon](images/icon-1.png)
 
 ### Basic Workflow
 
