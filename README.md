@@ -90,7 +90,7 @@ Na installatie is de plugin op twee manieren te benaderen:
 ## Probleemoplossing en ondersteuning
 
 - Raadpleeg de verschillende logs.
-- Bugs, wensen, andere issues: registreer deze in de [issue tracker](https://github.com/wvdbee/top10_downloader/issues).
+- Bugs, wensen, andere issues: registreer deze in de [issue tracker](https://github.com/wvdbee/top10nl_downloader/issues).
 
 
 ## Licentie
@@ -196,7 +196,7 @@ After installation, you can access the plugin in two ways:
 ## Troubleshooting, support
 
 - Check the logs.
-- For bugs, feature requests, and other issues, please submit them to the [issue tracker](https://github.com/wvdbee/top10_downloader/issues).
+- For bugs, feature requests, and other issues, please submit them to the [issue tracker](https://github.com/wvdbee/top10nl_downloader/issues).
 
 
 
