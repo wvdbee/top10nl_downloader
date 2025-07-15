@@ -18,8 +18,7 @@ from qgis.PyQt.QtWidgets import (QAction, QFileDialog, QMessageBox,
                                 QProgressBar, QRadioButton, QCheckBox, QGroupBox,
                                 QListWidget, QListWidgetItem)
 from qgis.core import (QgsProject, QgsRectangle, QgsVectorLayer, QgsLayerTreeGroup, QgsLayerTreeLayer,
-                      QgsCoordinateReferenceSystem, QgsDataSourceUri, 
-                      QgsProcessingFeedback, QgsTask, QgsApplication, 
+                      QgsCoordinateReferenceSystem, QgsTask, QgsApplication, 
                       QgsMessageLog, Qgis)
 from qgis.gui import QgsExtentGroupBox  # Import the new widget
 import processing
@@ -110,16 +109,13 @@ class Top10NLDownloader:
         # self.dlg = Top10NLDownloaderDialog(iface)
         # Aangepast door CoPilot:
         self.dlg = Top10NLDownloaderDialog(iface, self)
-        # Default values  (removed fixed extent - will be set dynamically)
 
         self.default_output = os.path.join(QgsProject.instance().homePath(), "Top10NL.gpkg")
         self.default_log = os.path.join(QgsProject.instance().homePath(), "Top10NL.log")
         
         # Declare instance attributes
         self.actions = []
-        # self.menu = 'Top10NL Downloader'   Remove me after testing
         self.menu = 'PDOK - OGC API Features-downloaders'
-        # self.toolbar = self.iface.addToolBar('Top10NL Downloader')  remove me after testing
         self.toolbar = self.iface.addToolBar('PDOK - OGC API Features-downloaders')
         self.toolbar.setObjectName('PDOK_OGC_API_Features_downloaders')
         
@@ -712,7 +708,6 @@ class Top10NLDownloadTask(QgsTask):
                         )
                         # Overwrite the layer in the GeoPackage with the deduplicated version
                         # toevoegen: alleen saven wanneer er duplicaten waren, anders is wegschrijven niet nodig
-                        # wegschrijven gaat niet goed
                         processing.run(
                             # "native:saveselectedfeatures",
                             "native:savefeatures",
@@ -723,14 +718,9 @@ class Top10NLDownloadTask(QgsTask):
                                 "LAYER_NAME": feature,
                                 "LAYER_OPTIONS": '',
                                 "ACTION_ON_EXISTING_FILE": 1,    # create or overwrite layer
-                                # hier gaat het fout.
-                                # "OUTPUT": layer_path
                                 "OUTPUT": self.output_file
                             }
                         )
-                        # dit logging-deel moet herschreven worden.
-                        # 1. er wordt niets weggeschreven
-                        # 2. dedup_result["DUPLICATE_COUNT"] danwel dedup_result["RETAINED_COUNT"] gebruiken in de logging
                         self.log(f"  {dedup_result['DUPLICATE_COUNT']} Duplicates features removed from {feature}; {dedup_result['RETAINED_COUNT']} features remaining")
                     except Exception as e:
                         self.log(f"  Error removing duplicates from {feature}: {str(e)}")
