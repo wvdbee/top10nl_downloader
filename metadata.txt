@@ -1,0 +1,31 @@
+# This file contains metadata for your plugin.
+# This file should be included when you package your plugin.
+# Mandatory items:
+
+[general]
+name=Top10NL Downloader
+qgisMinimumVersion=3.0
+description=Download Top10NL features via OGC-API
+version=0.9
+supportsQt6=True
+author=wvdbee, with help from Claude and CoPilot.
+email=wvdbosse@gmail.com
+
+about=This plugin downloads Top10NL features from the Dutch PDOK service via OGC-API Features. It allows specifying which feature types to download, the extent, and where to save the output.
+
+# Optional items:
+homepage=https://github.com/wvdbee/top10nl_downloader
+repository=https://github.com/wvdbee/top10nl_downloader
+tracker=https://github.com/wvdbee/top10nl_downloader/issues
+category=Web
+icon=icon.png
+
+# Tags are comma separated with spaces allowed
+tags=netherlands, PDOK, BRT, Top10NL, download, OGC API features, Dutch, base map
+
+hasProcessingProvider=no
+# experimental flag
+experimental=True
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
