@@ -8,11 +8,11 @@ Deze plugin is niet bedoeld om grote gebieden mee te downloaden. Wanneer grote g
 
 - Downloaden van BRT-Top10NL OAPIF-service bij de PDOK.
 - Instellen van de geografsche uitsnede van het te downloaden gebied.
-- Opslaan ban de features als Geopackage-layer
+- Opslaan van de features als Geopackage-layer
 - Loggen van de timing van alle downloadoperaties.
 - Optie om geopackage-layers te overschrijven of om features toe te voegen aan bestaande layers. 
 - Wanneer features worden toegevoegd aan een bestaande layer worden dubbele features verwijderd.
-- Layers kunnen meteen aan het QGIS-peoject worden toegevoegd
+- Layers kunnen meteen aan het QGIS-project worden toegevoegd
 
 ## Installatie
 
@@ -29,8 +29,8 @@ Deze plugin is niet bedoeld om grote gebieden mee te downloaden. Wanneer grote g
 ## Plugin gebruiken
 
 Na installatie is de plugin op twee manieren te benaderen:
-- Via het `Plugins`-menu > `PDOK OGC API Features-downloaders` > `Tp10NL Downloader`.
-- Via de `PDOK OGC API Features-downloaders` toolbar: het icoon van de `Top10NL Downloader` ![Top10 Downloader-icoon](images/icon-1.png)
+- Via het `Plugins`-menu > `PDOK OGC API Features-downloaders` > `Top10NL Downloader`.
+- Via de `PDOK OGC API Features-downloaders` toolbar: het icoon van de `Top10NL Downloader` ![Top10NL Downloader-icoon](images/icon-1.png)
 
 ### Standaardwerkwijze.
 
@@ -44,7 +44,7 @@ Na installatie is de plugin op twee manieren te benaderen:
 
 2. **Stel de parameters in**:
    - **Output-GPKG** (1): Kies de map waar het GeoPackage-bestand moet worden opgeslagen en geef het bestand een naam; of kies een bestaand geopackage-bestand. Een logfile met dezelfde naam wordt op dezelfde locatie opgeslagen.
-     - Standaardnaam voor een nieuwe geopackage is `Top10.gpkg`. 
+     - Standaardnaam voor een nieuwe geopackage is `Top10NL.gpkg`. 
      - Standaardmapnaam is de map waar het project is opgeslagen: de `QGIS-project home`.
      - **Waarschuwing:** *Het operating system van je computer kan een waarschuwing geven dat een geopackage-bestand wordt overschreven. Echter, de geopackage wordt niet overschreven. Alleen layers in de geopackage kunnen worden overschreven of er kunnen features aan layers worden toegevoegd.*
    - **Gebiedsuitsnede** (2): Stel de gebiedsuitsnede in met de uitsnede-widget. De standaard-uitsnede komt overeen met de huidige kaartuitsnede. Op verschillende manieren kan het te downloaden gebied ingesteld worden:
@@ -83,7 +83,7 @@ Na installatie is de plugin op twee manieren te benaderen:
      - Het panel met de `QGIS-Log Messages` toont wat meer informatie:
        - Het **Processing**-tabblad toont de output van de processing tools die in de plugin worden aangeroepen. Kijk in dit tabblad om eventuele processing errors te bekijken.
        - Het **OAPIF**-tabblad wordt getoond wanneer er connectieproblemen optreden aangaande de OGC API Features-service.
-       - Het  **Python**-tabblad wordt getoond wanneer er specifieke technische pythonproblemen optreden.
+       - Het **Python**-tabblad wordt getoond wanneer er specifieke technische pythonproblemen optreden.
 
 ![QGIS-project, met daarin de group layer waarin zich de geopackage-layers bevinden met de gedownloade Top10NL-features. Het QGIS-Log messages-paneel is zichtbaar onderaan het QGIS-scherm.](images/2025-07-12_16.49.22_6997.png)
 
@@ -101,14 +101,14 @@ This program is free software; you can redistribute it and/or modify it under th
 
 Deze QGIS-plugin is gemaakt met ondersteuning van AI: Claude en CoPilot zijn ingezet als hulp.
 Ik ben er bewust van dat AI gebruik maakt van het werk van andere mensen. Helaas ben ik niet in staat om eventuele referenties naar het werk van derden te achterhalen en, wanneer dat van toepassing is, eventuele credits aan deze personen te doen toekomen.
-
+In ieder geval ben ik schatplichtig aan de ontwikelaars van QGIS, GDAL en Python. Hun libraries worden in deze plugin ingezet.
 
 
 # Top10NL Downloader Plugin
 
 A QGIS plugin for downloading Dutch BRT-Top10NL features via the OGC-API Feature service from the PDOK. It's main purpose is to extract feature types for a limited spatial extent. 
 
-Do not use this plugin to download large area's. For that purpose use the [BRT Top10NL Atom downloadservice](https://www.pdok.nl/atom-downloadservices/-/article/basisregistratie-topografie-brt-topnl) instead. It will provide you with an up-to-date geopackage of Top10NL for the whole of The Netherlands.
+Please do not use this plugin to download large area's. For that purpose use the [BRT Top10NL Atom downloadservice](https://www.pdok.nl/atom-downloadservices/-/article/basisregistratie-topografie-brt-topnl) instead. It will provide you with an up-to-date geopackage of Top10NL for the whole of The Netherlands.
 
 ## Features
 
@@ -150,7 +150,7 @@ After installation, you can access the plugin in two ways:
 
 2. **Set parameters**:
    - **Output GPKG** (1): Choose where to save the GeoPackage file; a new file can be created or an existing geopackage file can be selected. A logfile will be created in the same location, with the same name as the geopackage file.
-     - Default name is `Top10.gpkg`. 
+     - Default name is `Top10NL.gpkg`. 
      - Default location is the QGIS project home if available.
      - **Warning:** *Your operating system may give a overwrite-warning whenever you select an existing geopagkage. However, the geopackage will not be overwritten. Only the layers within the geopackage will be overwritten or appended to.*
    - **Extent** (2): Define the area to download using the interactive extent widget. The default extent is the current map extent. Change the download extent as prefered:
@@ -161,10 +161,10 @@ After installation, you can access the plugin in two ways:
      - Select the extent of a bookmark.
      - Select the extent of a map on a map layout.
    - **Top10NL Feature types** (3): Select the feature types to download from the Top10NL OAPIF-service. Some usefull feature types are enabled by default:
-     - gebouw_vlak
-     - terrein_vlak
-     - wegdeel_vlak
-     - waterdeel_vlak
+     - *gebouw_vlak*
+     - *terrein_vlak*
+     - *wegdeel_vlak*
+     - *waterdeel_vlak*
    - **Operation Mode** (4): Choose to overwrite existing data or append to it. Default is `Append`.
      - `Append`: If a layer with the feature name is already available in the geopackage, features will be added to this layer. A post processing task will remove duplicate features, according to the **ID** of the features.
      - `Overwrite`: A layer with the feature name that is already available in the geopackage will be overwritten. Just the layer, not the geopackage.
@@ -208,4 +208,4 @@ This program is free software; you can redistribute it and/or modify it under th
 
 This QGIS-plugin had been made with the help of AI: both Claude and CoPilot.
 I am aware that AI uses the works made by other people. Unfortunately I was not able to trace back any references to their works and give proper credits where credits are due.
-
+In any case, I owe a debt of gratitude to the developers of QGIS, GDAL, and Python. Their libraries are used in this plugin.
