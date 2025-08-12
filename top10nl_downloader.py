@@ -4,7 +4,6 @@ Top10NL Downloader - A QGIS plugin for downloading Top10NL objects via OGC-API F
 
 import os
 import datetime
-# nieuw
 import json
 import urllib.request
 import urllib.error
@@ -107,15 +106,25 @@ class Top10NLDownloader:
         # self.dlg = Top10NLDownloaderDialog(iface)
         # Aangepast door CoPilot:
         self.dlg = Top10NLDownloaderDialog(iface, self)
-
-        self.default_output = os.path.join(QgsProject.instance().homePath(), "Top10NL.gpkg")
-        self.default_log = os.path.join(QgsProject.instance().homePath(), "Top10NL.log")
         
         # Declare instance attributes
         self.actions = []
         self.menu = 'PDOK - OGC API Features-downloaders'
-        self.toolbar = self.iface.addToolBar('PDOK - OGC API Features-downloaders')
-        self.toolbar.setObjectName('PDOK_OGC_API_Features_downloaders')
+        toolbar_name = 'PDOK_OGC_API_Features_downloaders'
+        # Check for existing toolbar
+        self.toolbar = None
+        for tb in self.iface.mainWindow().findChildren(type(self.iface.addToolBar('dummy'))):
+            if tb.objectName() == toolbar_name:
+                self.toolbar = tb
+                # If toolbar exists but is not visible, show it
+                if not self.toolbar.isVisible():
+                    self.iface.mainWindow().addToolBar(self.toolbar)
+                    self.toolbar.show()
+                break
+        # If not found, create it
+        if self.toolbar is None:
+            self.toolbar = self.iface.addToolBar('PDOK - OGC API Features-downloaders')
+            self.toolbar.setObjectName(toolbar_name)
         
         # Load default features
         self.load_default_features()
@@ -166,6 +175,11 @@ class Top10NLDownloader:
         """Add a toolbar icon to the toolbar"""
         
         icon = QIcon(icon_path)
+        # Remove existing actions with the same text from the toolbar
+        if add_to_toolbar:
+            for action in self.toolbar.actions():
+                if action.text() == text:
+                    self.toolbar.removeAction(action)
         action = QAction(icon, text, parent)
         action.triggered.connect(callback)
         action.setEnabled(enabled_flag)
@@ -208,13 +222,17 @@ class Top10NLDownloader:
         
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI"""
+        # Remove actions from menu and toolbar
         for action in self.actions:
-            # self.iface.removePluginMenu('Top10NL Downloader', action)
-            self.iface.removePluginMenu(self.menu, action) 
+            self.iface.removePluginMenu(self.menu, action)
             self.iface.removeToolBarIcon(action)
-        # remove the toolbar
-        del self.toolbar
-        
+            if self.toolbar and action in self.toolbar.actions():
+                self.toolbar.removeAction(action)
+        # If toolbar is now empty, remove it completely
+        if self.toolbar and len(self.toolbar.actions()) == 0:
+            # Remove toolbar from main window
+            self.iface.mainWindow().removeToolBar(self.toolbar)
+            del self.toolbar
     def load_default_features(self):
         """Load Top10NL features from OGC API Features service"""
         # Fallback features (your original list) in case API fails
@@ -275,7 +293,6 @@ class Top10NLDownloader:
             # Update dialog if it's already shown
             if hasattr(self, 'dlg') and self.dlg.isVisible():
                 self.dlg.populate_features_list(self.features)
-    			###### AANPASSEN
                 # Set some default selections for commonly used features
                 self.dlg.set_default_selection()
         else:
@@ -330,9 +347,12 @@ class Top10NLDownloader:
             "GeoPackage (*.gpkg)")
             
         if filename:
+            filename = os.path.normpath(filename)
             self.dlg.txt_output.setText(filename)
             
     def on_output_file_changed(self, text):
+        # nieuw
+        text = os.path.normpath(text)
         base, _ = os.path.splitext(text)
         self.default_log = base + ".log"
  
@@ -399,6 +419,15 @@ class Top10NLDownloader:
             
     def run(self):
         """Run method that performs all the real work"""
+        # Update home_path when plugin is used
+        home_path_str = QgsProject.instance().homePath()
+        if not home_path_str or home_path_str == '.':
+            home_path_str = os.path.expanduser("~")
+            if not home_path_str:
+                home_path_str = self.plugin_dir
+        # Construct default output and log file paths in an OS-independent way
+        self.default_output = os.path.normpath(os.path.join(home_path_str, "Top10NL.gpkg"))
+        self.default_log = os.path.normpath(os.path.join(home_path_str, "Top10NL.log"))
         # Set default values in dialog
         self.dlg.txt_output.setText(self.default_output)
         self.on_output_file_changed(self.default_output)
@@ -591,6 +620,9 @@ class Top10NLDownloadTask(QgsTask):
     log_updated = pyqtSignal(str)       # For log messages
     
     def __init__(self, features, extent, output_file, log_file, overwrite, dialog, iface):
+        # Normalize all file paths
+        output_file = os.path.normpath(output_file)
+        log_file = os.path.normpath(log_file)
         super().__init__("Top10NL Download Task", QgsTask.Flag.CanCancel)
         self.features = features
         self.extent = extent
@@ -671,7 +703,6 @@ class Top10NLDownloadTask(QgsTask):
                 }
                 
                 try:
-                    # Nog geen idee hoe je hier foute conversies 
                     processing.run("gdal:convertformat", params)
                     self.log(f"  Feature {feature} processed")
                 except Exception as e:
@@ -689,7 +720,7 @@ class Top10NLDownloadTask(QgsTask):
             if not self.overwrite:
                 self.log("Removing duplicate features based on 'ID' attribute...")
                 for feature in self.features:
-                    layer_path = f"{self.output_file}|layername={feature}"
+                    layer_path = os.path.normpath(f"{self.output_file}|layername={feature}")
                     layer = QgsVectorLayer(layer_path, feature, "ogr")
                     if not layer.isValid():
                         self.log(f"  Could not open layer {feature} for deduplication.")
@@ -707,11 +738,8 @@ class Top10NLDownloadTask(QgsTask):
                         # Overwrite the layer in the GeoPackage with the deduplicated version
                         # toevoegen: alleen saven wanneer er duplicaten waren, anders is wegschrijven niet nodig
                         processing.run(
-                            # "native:saveselectedfeatures",
                             "native:savefeatures",
                             {
-                                # Copilot gaat denk ik mis met de input
-                                # "INPUT": layer,
                                 "INPUT": dedup_result["OUTPUT"],
                                 "LAYER_NAME": feature,
                                 "LAYER_OPTIONS": '',
@@ -764,7 +792,9 @@ class Top10NLDownloadTask(QgsTask):
                         if hasattr(child, 'layer') and child.layer() is not None:
                             existing_layer = child.layer()
                             # Only refresh layers from this GeoPackage
-                            if self.output_file in existing_layer.source():
+                            existing_source = os.path.normpath(existing_layer.source())
+                            normalized_output = os.path.normpath(self.output_file)
+                            if normalized_output in existing_source:
                                 existing_layer.triggerRepaint()
 
                 if reply == QMessageBox.StandardButton.Yes:
@@ -785,7 +815,7 @@ class Top10NLDownloadTask(QgsTask):
                         feature = feature.strip()
                         if not feature:
                             continue
-                        layer_source = f"{self.output_file}|layername={feature}"
+                        layer_source = os.path.normpath(f"{self.output_file}|layername={feature}")
                         layer = QgsVectorLayer(layer_source, f"Top10NL {feature}", "ogr")
                         if layer.isValid():
                             # Check if this layer already exists in the group (by source)
@@ -793,8 +823,10 @@ class Top10NLDownloadTask(QgsTask):
                             for child in group_layer.children():
                                 if hasattr(child, 'layer') and child.layer() is not None:
                                     existing_layer = child.layer()
-                                    if (existing_layer.source() == layer_source or
-                                        existing_layer.dataProvider().dataSourceUri() == layer_source):
+                                    # Normalize both paths before comparing
+                                    existing_source = os.path.normpath(existing_layer.source())
+                                    if (existing_source == layer_source or
+                                        os.path.normpath(existing_layer.dataProvider().dataSourceUri()) == layer_source):
                                         already_in_group = True
                                         break
                             if not already_in_group:
