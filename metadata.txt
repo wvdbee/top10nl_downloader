@@ -29,3 +29,8 @@ experimental=false
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
+
+# changelog
+changelog=
+    0.9   - initial release. experimantal.
+    0.91  - minor code changes: path handling; default path; toolbar implementation.
