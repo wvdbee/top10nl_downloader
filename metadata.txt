@@ -5,8 +5,8 @@
 [general]
 name=Top10NL Downloader
 qgisMinimumVersion=3.0
-description=Download Top10NL features via OGC-API
-version=0.9
+description=Download Top10NL features via the PDOK OGC-API Features service.
+version=0.91
 supportsQt6=True
 author=wvdbee, with help from Claude and CoPilot.
 email=wvdbosse@gmail.com
@@ -25,7 +25,7 @@ tags=netherlands, PDOK, BRT, Top10NL, download, OGC API features, Dutch, base ma
 
 hasProcessingProvider=no
 # experimental flag
-experimental=True
+experimental=false
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
